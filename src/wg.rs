@@ -31,7 +31,7 @@ pub struct WireGuardTunnel {
     /// The UDP socket for the public WireGuard endpoint to connect to.
     udp: UdpSocket,
     /// The address of the public WireGuard endpoint (UDP).
-    endpoint: SocketAddr,
+    pub(crate) endpoint: SocketAddr,
     /// Broadcast sender for received IP packets.
     ip_broadcast_tx: tokio::sync::broadcast::Sender<Vec<u8>>,
     /// Sink so that the broadcaster doesn't close. A repeating task should drain this as much as possible.

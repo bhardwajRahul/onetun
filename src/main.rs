@@ -53,11 +53,6 @@ async fn main() -> anyhow::Result<()> {
         tokio::spawn(async move { wg.broadcast_drain_task().await });
     }
 
-    info!(
-        "Tunnelling [{}]->[{}] (via [{}] as peer {})",
-        &config.source_addr, &config.dest_addr, &config.endpoint_addr, &config.source_peer_ip
-    );
-
     tcp_proxy_server(
         config.source_addr,
         config.source_peer_ip,
@@ -79,6 +74,11 @@ async fn tcp_proxy_server(
     let listener = TcpListener::bind(listen_addr)
         .await
         .with_context(|| "Failed to listen on TCP proxy server")?;
+
+    info!(
+        "Tunnelling TCP [{}]->[{}] (via [{}] as peer {})",
+        &listen_addr, &dest_addr, &wg.endpoint, &source_peer_ip
+    );
 
     loop {
         let wg = wg.clone();
